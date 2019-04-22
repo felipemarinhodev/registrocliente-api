@@ -1,6 +1,7 @@
 package br.com.felipemarinho.registrocliente.api.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import br.com.felipemarinho.registrocliente.api.repository.ClienteRepository;
 import br.com.felipemarinho.registrocliente.api.repository.EnderecoRepository;
 import br.com.felipemarinho.registrocliente.api.response.Response;
 import br.com.felipemarinho.registrocliente.api.service.ClienteService;
+import br.com.felipemarinho.registrocliente.api.service.EnderecoService;
 import br.com.felipemarinho.registrocliente.api.service.MailService;
 import br.com.felipemarinho.registrocliente.api.service.TelefoneService;
 
@@ -35,6 +37,9 @@ public class ClienteServiceImpl implements ClienteService {
 	@Autowired
 	private TelefoneService telefoneService;
 	
+	@Autowired 
+	private EnderecoService enderecoService;
+	
 	@Override
 	public Response<String> remover(String id) {
 		Response<String> response = new Response<String>();
@@ -43,8 +48,16 @@ public class ClienteServiceImpl implements ClienteService {
 			response.getErros().add("Registro não foi encontrado id: "+ id);
 			return response;
 		}
+		
+		removerVinculosDoCliente(cliente);
 		this.clienteRepository.delete(id);
 		return new Response<>();
+	}
+
+	private void removerVinculosDoCliente(Cliente cliente) {
+		this.mailService.removerDoUsuario(Optional.of(cliente.getMails()));
+		this.telefoneService.removerDoUsuario(Optional.of(cliente.getTelefones()));
+		this.enderecoService.removerDoUsuario(Optional.of(cliente.getEndereco()));
 	}
 
 	@Override

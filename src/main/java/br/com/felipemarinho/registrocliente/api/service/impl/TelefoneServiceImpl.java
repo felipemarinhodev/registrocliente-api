@@ -2,6 +2,7 @@ package br.com.felipemarinho.registrocliente.api.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,19 @@ public class TelefoneServiceImpl implements TelefoneService{
 			listaDeTelefone.add(tel);
 		});
 		return listaDeTelefone;
+	}
+
+	@Override
+	public void removerDoUsuario(Optional<List<Telefone>> telefones) {
+		if (telefones.isPresent()) {
+			removerTelefones(telefones.get());
+		}
+	}
+
+	private void removerTelefones(List<Telefone> telefones) {
+		telefones.forEach(telefone -> {
+			telefoneRepository.delete(telefone);
+		});
 	}
 
 }

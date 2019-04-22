@@ -14,4 +14,6 @@ public interface EnderecoService {
 	Optional<Endereco> findById(String id);
 	
 	void delete(String id);
+
+	void removerDoUsuario(Optional<Endereco> endereco);
 }

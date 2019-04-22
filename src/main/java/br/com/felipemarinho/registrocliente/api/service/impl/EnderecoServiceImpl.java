@@ -30,4 +30,11 @@ public class EnderecoServiceImpl implements EnderecoService {
 		this.enderecoRepository.delete(id);
 	}
 
+	@Override
+	public void removerDoUsuario(Optional<Endereco> endereco) {
+		if (endereco.isPresent()) {
+			enderecoRepository.delete(endereco.get());
+		}
+	}
+
 }

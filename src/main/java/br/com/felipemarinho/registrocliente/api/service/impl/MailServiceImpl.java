@@ -2,6 +2,7 @@ package br.com.felipemarinho.registrocliente.api.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,6 +38,19 @@ public class MailServiceImpl implements MailService{
 		}
 		this.mailRepository.delete(id);
 		return new Response<>();
+	}
+
+	@Override
+	public void removerDoUsuario(Optional<List<Mail>> mails) {
+		if (mails.isPresent()) {
+			removerMailsDaLista(mails.get());
+		}
+	}
+
+	private void removerMailsDaLista(List<Mail> mails) {
+		mails.forEach(mail -> {
+			mailRepository.delete(mail);
+		});
 	}
 	
 }
